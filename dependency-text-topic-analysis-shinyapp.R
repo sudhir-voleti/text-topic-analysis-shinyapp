@@ -1,0 +1,16 @@
+try(require("shiny")||install.packages("shiny"))
+try(require("tm")||install.packages("tm"))
+try(require("wordcloud")||install.packages("wordcloud"))
+try(require("maptpx")||install.packages("maptpx"))
+try(require("RWeka")||install.packages("RWeka"))
+try(require("igraph")||install.packages("igraph"))
+try(require("stringr")||install.packages("stringr"))
+
+library("shiny")
+library("tm")
+library("wordcloud")
+library("maptpx")
+library("RWeka")
+library("igraph")
+library("stringr")
+

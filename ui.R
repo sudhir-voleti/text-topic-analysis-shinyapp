@@ -31,6 +31,9 @@ library("shiny")
     
     numericInput("topic", "Number of Topics to fit:", 2),
     
+    numericInput("nodes", "Number of Central Nodes in co-occurrence graph", 4),
+    numericInput("connection", "Number of Max Connection with Central Node", 5),
+    
     submitButton(text = "Apply Changes", icon("refresh"))
       
     ),
@@ -52,8 +55,12 @@ library("shiny")
                         p("You might observe no change in the outputs after clicking 'Apply Changes'. Wait for few seconds. As soon as all the cumputations
                           are over in back-end results will be refreshed",
                           align = "justify"),
-                        verbatimTextOutput("tmp"),br())
-,
+                        verbatimTextOutput("tmp"),br()),
+              
+                       tabPanel("Example dataset", h4(p("Download Sample text file")), 
+                       downloadButton('downloadData1', 'Download Nokia Lumia reviews txt file'),br(),br(),
+                       p("Please note that download will not work with RStudio interface. Download will work only in web-browsers. So open this app in a web-browser and then download the example file. For opening this app in web-browser click on \"Open in Browser\" as shown below -"),
+                       img(src = "example1.png")),
 
                          tabPanel("Corpus Word Cloud",plotOutput("wordcloud")),
 #                         

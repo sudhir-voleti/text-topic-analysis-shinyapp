@@ -12,7 +12,74 @@ library(stringr)
 library(igraph)
 
 shinyServer(function(input, output,session) {
-    set.seed=2092014   
+  
+  distill.cog = function(dtm1, # input dtm
+                         title, # title for the graph
+                         s,    # no. of central nodes
+                         k1){  # max no. of connections  
+    
+    mat = as.matrix((dtm1))  # input dtm here
+    
+    mat1 = t(mat) %*% mat    # build 1 mode term term matrix
+    
+    # diag(mat1) =  0 
+    
+    #  mat1[1:10,1:6]   # view a few rows n cols
+    
+    a = colSums(mat1)  # collect colsums into a vector obj a
+    
+    b = order(-a)     # nice syntax for ordering vector in decr order  
+    
+    mat2 = mat1[b,b]  # 
+    
+    #  mat2[1:10,1:6]
+    
+    diag(mat2) =  0
+    
+    ## +++ go row by row and find top k adjacencies +++ ##
+    
+    wc = NULL
+    
+    for (i1 in 1:s){ 
+      
+      thresh1 = mat2[i1,][order(-mat2[i1, ])[k1]]
+      
+      mat2[i1, mat2[i1,] < thresh1] = 0   # wow. didn't need 2 use () in the subset here.
+      
+      mat2[i1, mat2[i1,] > 0 ] = 1
+      
+      word = names(mat2[i1, mat2[i1,] > 0])
+      
+      mat2[(i1+1):nrow(mat2), match(word,colnames(mat2))] = 0
+      
+      wc = c(wc,word)
+      
+    } # i1 loop ends
+    
+    
+    mat3 = mat2[match(wc, colnames(mat2)), match(wc, colnames(mat2))]
+    
+    ord = colnames(mat2)[which(!is.na(match(colnames(mat2), colnames(mat3))))]  # removed any NAs from the list
+    
+    mat4 = mat3[match(ord, colnames(mat3)), match(ord, colnames(mat3))]
+    
+    graph <- graph.adjacency(mat4, mode = "undirected", weighted=T)    # Create Network object
+    
+    graph = simplify(graph)  
+    
+    V(graph)$color[1:s] = "green"
+    
+    V(graph)$color[(s+1):length(V(graph))] = "pink"
+    
+    # plot(graph)#,layout=layout.lgl)
+    
+    plot(graph, layout=layout.kamada.kawai, main = title)
+    
+    # title(main = paste("Top Words used in review -",name))
+    
+  }  
+  
+  set.seed=2092014   
   
     dataset <- reactive({
     
@@ -338,26 +405,31 @@ shinyServer(function(input, output,session) {
           
           mat  = tdm()[match(row.names(freq1),row.names(tdm())),]
           
-          mat = as.matrix(mat[order(rowSums(as.matrix(mat)),decreasing=T),][1:n,])
+          # mat = as.matrix(mat[order(rowSums(as.matrix(mat)),decreasing=T),][1:n,])
+          # 
+          # cmat  =  mat %*% t(mat)
+          # diag(cmat) = 0
+          # cmat[cmat <  quantile(cmat,.90)] = 0
           
-          cmat  =  mat %*% t(mat)
-          diag(cmat) = 0
-          cmat[cmat <  quantile(cmat,.90)] = 0
+          distill.cog(t(mat),'',
+                      input$nodes,
+                      input$connection)
           
-          graph <- graph.adjacency(cmat, mode = "undirected",weighted=T)
-          # par(mai=c(0,0,0,0))   		#this specifies the size of the margins. the default settings leave too much free space on all sides (if no axes are printed)
-          plot(  graph,			#the graph to be plotted
-                 layout=layout.fruchterman.reingold,	# the layout method. see the igraph documentation for details
-                 #main='Organizational network example',	#specifies the title
-                 #vertex.label.dist=0.5,			#puts the name labels slightly off the dots
-                 vertex.frame.color='blue', 		#the color of the border of the dots 
-                 vertex.label.color='black',		#the color of the name labels
-                 vertex.label.font=1,			#the font of the name labels
-                 vertex.size = .00001,
-                 # vertex.label=col.names,		#specifies the lables of the vertices. in this case the 'name' attribute is used
-                 vertex.label.cex=1.3			#specifies the size of the font of the labels. can also be made to vary
-                 # title( main = paste("Segemnt ",my_i))
-          )
+          
+          # graph <- graph.adjacency(cmat, mode = "undirected",weighted=T)
+          # # par(mai=c(0,0,0,0))   		#this specifies the size of the margins. the default settings leave too much free space on all sides (if no axes are printed)
+          # plot(  graph,			#the graph to be plotted
+          #        layout=layout.fruchterman.reingold,	# the layout method. see the igraph documentation for details
+          #        #main='Organizational network example',	#specifies the title
+          #        #vertex.label.dist=0.5,			#puts the name labels slightly off the dots
+          #        vertex.frame.color='blue', 		#the color of the border of the dots 
+          #        vertex.label.color='black',		#the color of the name labels
+          #        vertex.label.font=1,			#the font of the name labels
+          #        vertex.size = .00001,
+          #        # vertex.label=col.names,		#specifies the lables of the vertices. in this case the 'name' attribute is used
+          #        vertex.label.cex=1.3			#specifies the size of the font of the labels. can also be made to vary
+          #        # title( main = paste("Segemnt ",my_i))
+          # )
           
           mtext(paste("Topic",my_i), side = 3, line = 2, cex=2)
           
@@ -428,7 +500,13 @@ shinyServer(function(input, output,session) {
       out = list(tdm(),x2mat(),theta(),lift(),twc())
       cat("Calculation Completed")}
     })
-    
+
+    output$downloadData1 <- downloadHandler(
+      filename = function() { "Nokia_Lumia_reviews.txt" },
+      content = function(file) {
+        writeLines(readLines("data/Nokia_Lumia_reviews.txt"), file)
+      }
+    )    
     
 })
 
