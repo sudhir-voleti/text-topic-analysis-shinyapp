@@ -17,7 +17,7 @@ library("shiny")
   
     fileInput("file", "Upload text file"),
     
-    textInput("stopw", ("Enter stop words seperated by comma(,)"), value = "will,can"),
+    textInput("stopw", ("Enter stop words separated by comma(,)"), value = "will,can"),
     
     sliderInput("freq", "Minimum Frequency in Wordcloud:", min = 1,  max = 50, value = 4),
     
@@ -46,13 +46,13 @@ library("shiny")
 #
                         tabPanel("Overview",h4(p("How to use this App")),
                                  
-                        p("To use this app you need a document corpus in txt file format. Make sure each document is seperated from another document with a new line character.
+                        p("To use this app you need a document corpus in txt file format. Make sure each document is separated from another document with a new line character.
                           To fit topic models in your text corpus, click on Browse in left-sidebar panel and upload the txt file. Once the file is uploaded it will fit 
-                          the topic models with default inputs and accordingly results will be displayed in various.", align = "justify"),
-                        p("If you wish to change the input, modify the input in left side-bar panel and click on Apply changes. Accordingly results in other tab will be refeshed
+                          the topic models with default inputs and accordingly results will be displayed in various tabs.", align = "justify"),
+                        p("If you wish to change the input, modify the input in left side-bar panel and click on Apply changes. Accordingly results in other tab will be refreshed
                           ", align = "Justify"),
                         h5("Note"),
-                        p("You might observe no change in the outputs after clicking 'Apply Changes'. Wait for few seconds. As soon as all the cumputations
+                        p("You might observe no change in the outputs after clicking 'Apply Changes'. Wait for few seconds. As soon as all the computations
                           are over in back-end results will be refreshed",
                           align = "justify"),
                         verbatimTextOutput("tmp"),br()),
