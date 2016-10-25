@@ -71,7 +71,7 @@ library("shiny")
                         
 #                         
                          tabPanel("Data with Topic Proportions",br(),br(),
-                                  downloadButton('downloadData2', 'Download Topic Proportions file'), br(),br(),
+                                  downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
                                   dataTableOutput("table"))
 #                         
                  )
