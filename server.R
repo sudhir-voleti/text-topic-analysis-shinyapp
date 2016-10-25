@@ -480,10 +480,9 @@ shinyServer(function(input, output,session) {
 #     })
 #     
 
-# Show table:
-    output$table <- renderDataTable({
-      if (is.null(input$file)) {return(NULL)}
-      {
+  da1 = reactive({
+    if (is.null(input$file)) {return(NULL)}
+    {
       tb = twc()
       tb = tb/rowSums(tb)
       tb = tb*100
@@ -492,8 +491,12 @@ shinyServer(function(input, output,session) {
       
       test = merge(tb,dataset(),by.x ="Doc.id", by.y= "Doc.id", all=T)
       return(test)}
-    }, options = list(lengthMenu = c(5, 30, 50), pageLength = 5))
-
+  })
+# Show table:
+    output$table <- renderDataTable({
+    da1()
+    }, options = list(lengthMenu = c(5, 30, 50), pageLength = 30))
+    
     output$tmp <- renderPrint({
       if (is.null(input$file)) {return(NULL)}
       else {
@@ -506,7 +509,14 @@ shinyServer(function(input, output,session) {
       content = function(file) {
         writeLines(readLines("data/Nokia_Lumia_reviews.txt"), file)
       }
-    )    
+    )
+    
+    output$downloadData2 <- downloadHandler(
+      filename = function() { "Topic_scores.csv" },
+      content = function(file) {
+        write.csv(da1(), file, row.names=F)
+      }
+    )
     
 })
 

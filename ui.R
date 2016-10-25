@@ -70,7 +70,9 @@ library("shiny")
                          # tabPanel("Topics eta values",tableOutput("summary2")),
                         
 #                         
-                         tabPanel("Data with Topic Proportions",dataTableOutput("table"))
+                         tabPanel("Data with Topic Proportions",br(),br(),
+                                  downloadButton('downloadData2', 'Download Topic Proportions file'), br(),br(),
+                                  dataTableOutput("table"))
 #                         
                  )
               )
