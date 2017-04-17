@@ -172,7 +172,8 @@ for (j in 1:max_plots) {
                       title = paste0("TCM from DTM Adjacency - Topic ",my_i1), # title for the graph
                       s=input$nodes,    # no. of central nodes
                       k1 = input$connection)  # No. of Connection with central Nodes
-      mtext(paste("Term co-occurrence - Topic",my_i1), side = 3, line = 2, cex=2)
+      # mtext(paste("Term co-occurrence - Topic",my_i1), side = 3, line = 2, cex=2)
+      box(lty = '11', col = 'black')
     })
   })
 }
