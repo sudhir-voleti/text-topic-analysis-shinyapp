@@ -21,8 +21,8 @@ shinyUI(fluidPage(
     
     textInput("stopw", ("Enter stop words separated by comma(,)"), value = "will,can"),
     
-    selectInput("ws", "Weighing Scheme", 
-                c("weightTf","weightTfIdf"), selected = "weightTf"), # weightTf, weightTfIdf, weightBin, and weightSMART.
+    # selectInput("ws", "Weighing Scheme", 
+    #             c("weightTf","weightTfIdf"), selected = "weightTf"), # weightTf, weightTfIdf, weightBin, and weightSMART.
     
     sliderInput("freq", "Minimum Frequency in DTM:", min = 1,  max = 50, value = 2),
     

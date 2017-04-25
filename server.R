@@ -28,13 +28,13 @@ dtm_tcm =  reactive({
                             # bigram.min.freq = 20,
                             min.dtm.freq = input$freq,
                             skip.grams.window = 10)
-  if (input$ws == "weightTf") {
+  # if (input$ws == "weightTf") {
     dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTf)  
-  } 
-  
-  if (input$ws == "weightTfIdf"){
-    dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTfIdf)
-  }
+  # } 
+  # 
+  # if (input$ws == "weightTfIdf"){
+  #   dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTfIdf)
+  # }
   
   tcm = dtm.tcm$tcm
   dtm_tcm_obj = list(dtm = dtm, tcm = tcm)
