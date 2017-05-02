@@ -12,7 +12,7 @@ library(maptpx)
 
 shinyUI(fluidPage(
   
- titlePanel("Basic Text Analysis"),
+ titlePanel("Text Topic Analysis"),
   
   # Input in sidepanel:
   sidebarPanel(
