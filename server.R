@@ -36,8 +36,8 @@ dtm_tcm =  reactive({
   #   dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTfIdf)
   # }
   
-  tcm = dtm.tcm$tcm
-  dtm_tcm_obj = list(dtm = dtm, tcm = tcm)
+  # tcm = dtm.tcm$tcm
+  dtm_tcm_obj = list(dtm = dtm)#tcm = tcm)
   return(dtm_tcm_obj)
 })
 

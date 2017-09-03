@@ -140,7 +140,6 @@ distill.cog.tcm = function(mat1, # input TCM or DTM MAT
        layout = layout.kamada.kawai, 
        main = title)
 } 
-
 dtm.tcm.creator <- function(text,id = "",
                             std.clean = TRUE,
                             std.stop.words = TRUE,
@@ -153,8 +152,8 @@ dtm.tcm.creator <- function(text,id = "",
   # if (class(text) != "character" | length(text) < 3){
   #   stop("data format Not correct. Make sure it's a character verctor of length above 3")
   # }
-  stpw1 = readLines('https://raw.githubusercontent.com/sudhir-voleti/basic-text-analysis-shinyapp/master/data/stopwords.txt')# stopwords list from git
-  # stpw1 = readLines("data/stopwords.txt")# stopwords list from git
+  
+  stpw1 = readLines("data/stopwords.txt")# stopwords list from git
   stpw2 = tm::stopwords('english')      # tm package stop word list; tokenizer package has the same name function, hence 'tm::'
   stpw3  = unique(gsub("'"," ",c(stpw1,stpw2)))
   
@@ -188,8 +187,9 @@ dtm.tcm.creator <- function(text,id = "",
                    progressbar = F)
     
     vocab = create_vocabulary(it_0, ngram = c(2L, 2L))
-    pruned_vocab = prune_vocabulary(vocab, term_count_min = bigram.min.freq)
-    replace_list = pruned_vocab$vocab$terms[order(pruned_vocab$vocab$terms_counts, decreasing = T)]
+    pruned_vocab = data.frame(prune_vocabulary(vocab, term_count_min = bigram.min.freq))
+    
+    replace_list = pruned_vocab$term[order(pruned_vocab$term_count, decreasing = T)]
     
     # Cut the bi-grams upto 200 words
     
@@ -211,7 +211,7 @@ dtm.tcm.creator <- function(text,id = "",
         # setTxtProgressBar(pb, i)
       }                  
     } else {
-       print("No bigram to encode with selected criteria")}
+      print("No bigram to encode with selected criteria")}
   }
   
   # print("Creating Document Term Matrix")
@@ -231,15 +231,15 @@ dtm.tcm.creator <- function(text,id = "",
   
   # print("Creating Term Co-occurrence Matrix")
   
-  vectorizer = vocab_vectorizer(pruned_vocab,
-                                grow_dtm = FALSE,
-                                skip_grams_window = skip.grams.window)
-  
-  tcm = create_tcm(it_m, vectorizer) # func to build a TCM
+  # vectorizer = vocab_vectorizer(pruned_vocab,
+  #                               grow_dtm = FALSE,
+  #                               skip_grams_window = skip.grams.window)
+  # 
+  # tcm = create_tcm(it_m, vectorizer) # func to build a TCM
   
   # print("Done!!")
   
-  out = list(dtm = dtm_m, tcm = tcm)
+  out = list(dtm = dtm_m)#, tcm = tcm)
   return(out)
 }
 
