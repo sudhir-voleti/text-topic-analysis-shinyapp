@@ -77,10 +77,11 @@ shinyUI(fluidPage(
                 # tabPanel("Topics eta values",tableOutput("summary2")),
                 
                 #                         
+                tabPanel("Terms-Topic Score",h4("Top terms for each topic"),tableOutput("score")),
                 tabPanel("Data with Topic Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
-                         dataTableOutput("table")),
-                tabPanel("Terms-Topic Score",h4("Top terms for each topic"),tableOutput("score"))
+                         dataTableOutput("table"))
+                
                          )
            )
        )
