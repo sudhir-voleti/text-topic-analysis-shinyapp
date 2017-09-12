@@ -203,6 +203,7 @@ for (j in 1:max_plots) {
   }
   mat = theta[row.names(theta) %in% names(words),]
   mat = mat[order(mat[,1],mat[,2], decreasing = T),]
+   mat = round(mat, 2)
   terms = row.names(mat)
   mat1 = data.frame(terms, mat)
   colnames(mat1) = c('terms', paste0('topic_',1:input$topic))
@@ -211,7 +212,7 @@ for (j in 1:max_plots) {
   
 # Show table:
 output$score <- renderDataTable({
-  round(da2(), 3)
+  da2()
 }, options = list(lengthMenu = c(10, 30, 50), pageLength = 100))  # my edits here
   
 # }, digits = 3)   # my edit
