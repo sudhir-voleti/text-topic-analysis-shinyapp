@@ -205,8 +205,8 @@ for (j in 1:max_plots) {
   mat = mat[order(mat[,1],mat[,2], decreasing = T),]
    mat = round(mat, 2)
   terms = row.names(mat)
-  mat1 = data.frame(terms, mat)
-  colnames(mat1) = c('terms', paste0('topic_',1:input$topic))
+  mat1 = data.frame(mat)   # , terms
+  colnames(mat1) = c(paste0('topic_',1:input$topic))    # 'terms', 
   return(mat1)
 })     # reactive da2 ends
   
