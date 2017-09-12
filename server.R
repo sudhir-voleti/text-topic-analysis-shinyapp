@@ -178,6 +178,29 @@ for (j in 1:max_plots) {
   })
 }
 
+output$score = renderTable({
+  # head(lda()$theta,30)
+  
+  censored.lift = lda()$censored.lift
+  theta = lda()$theta
+  p = round(50/input$topic)
+  words = NULL
+  
+  for(i in 1:input$topic){
+  
+  a0 = which(censored.lift[,i] > 1) # terms with lift greator than 1 for topic i
+  freq = theta[a0,i] # Theta for terms lift greator than 1
+  freq = sort(freq, decreasing = T) # Terms with higher probilities for topic i
+  freq = freq[1:p]
+  words = c(words,freq)
+  }
+  mat = theta[row.names(theta) %in% names(words),]
+  mat = mat[order(mat[,1],mat[,2], decreasing = T),]
+  terms = row.names(mat)
+  mat1 = data.frame(terms, mat)
+  colnames(mat1) = c('terms', paste0('topic_',1:input$topic))
+  mat1
+}, digits = 5)
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
   {
