@@ -183,13 +183,18 @@ output$score = renderTable({
   
   censored.lift = lda()$censored.lift
   theta = lda()$theta
-  p = round(50/input$topic)
+  
+  # my edit begins here
+  z0 = apply(theta, 2, mean)
+  theta = theta/z0   # my edit ends
+  
+  p = round(75/input$topic)
   words = NULL
   
   for(i in 1:input$topic){
   
   a0 = which(censored.lift[,i] > 1) # terms with lift greator than 1 for topic i
-  freq = theta[a0,i] # Theta for terms lift greator than 1
+  freq = theta[a0, i] # Theta for terms lift greator than 1
   freq = sort(freq, decreasing = T) # Terms with higher probilities for topic i
   freq = freq[1:p]
   words = c(words,freq)
