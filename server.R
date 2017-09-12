@@ -178,8 +178,10 @@ for (j in 1:max_plots) {
   })
 }
 
-output$score = renderTable({
+# output$score = renderTable({
   # head(lda()$theta,30)
+  
+ da2 = reactive({ 
   
   censored.lift = lda()$censored.lift
   theta = lda()$theta
@@ -204,8 +206,15 @@ output$score = renderTable({
   terms = row.names(mat)
   mat1 = data.frame(terms, mat)
   colnames(mat1) = c('terms', paste0('topic_',1:input$topic))
-  mat1
-}, digits = 3)   # my edit
+  return(mat1)
+})     # reactive da2 ends
+  
+# Show table:
+output$score <- renderDataTable({
+  round(da2(), 3)
+}, options = list(lengthMenu = c(10, 30, 50), pageLength = 100))  # my edits here
+  
+# }, digits = 3)   # my edit
   
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
