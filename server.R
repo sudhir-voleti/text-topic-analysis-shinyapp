@@ -205,15 +205,16 @@ output$score = renderTable({
   mat1 = data.frame(terms, mat)
   colnames(mat1) = c('terms', paste0('topic_',1:input$topic))
   mat1
-}, digits = 5)
+}, digits = 3)   # my edit
+  
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
   {
     tb = lda()$kappa*100
-    tb = data.frame(as.numeric(rownames(tb)),tb)
+    tb = data.frame(as.numeric(rownames(tb)), round(tb, 2))   # my edit
     colnames(tb) = c("Doc.id",paste("Topic",1:(ncol(tb)-1)))
     
-    test = merge(tb,dataset(),by.x ="Doc.id", by.y= "Doc.id", all=T)
+    test = merge(tb, dataset(), by.x ="Doc.id", by.y= "Doc.id", all=T)
     return(test)}
 })
 # Show table:
