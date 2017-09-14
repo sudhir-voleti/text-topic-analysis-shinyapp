@@ -288,7 +288,7 @@ fit.lda.topics  <- function(dtm,K=2 ){
   }
   
   
-  if(nrow(dtm) < 1000) {k1 = 10} else {k1= 100}   # to avoid machine choking up in v small datasets
+  if(nrow(dtm) < 1000) {k1 = 2} else {k1= 100}   # k1=10 tha, ab k1=2 kar diya. to avoid machine choking up in v small datasets
   
   tst = ceiling(nrow(dtm)/k1)  # now using 1% of the rows at a time
   a = rep(tst, (k1 - 1))
