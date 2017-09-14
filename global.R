@@ -197,7 +197,7 @@ dtm.tcm.creator <- function(text,id = "",
       replace_list = replace_list[1:200]
     }
     
-    if (length(replace_list) > 0){
+    if (length(replace_list) > 1){    # my edit. was 0, now 1.
       text = paste("",text,"")
       
       pb <- txtProgressBar(min = 1, max = (length(replace_list)), style = 3) ; i = 0
