@@ -1,11 +1,11 @@
-try(require(shiny) || install.packages("shiny"))
-try(require(text2vec) || install.packages("text2vec"))
-try(require(tm) || install.packages("tm"))
-try(require(tokenizers) || install.packages("tokenizers"))
-try(require(wordcloud) || install.packages("wordcloud"))
-try(require(slam) || install.packages("slam"))
-try(require(maptpx) || install.packages("maptpx"))
-try(require(igraph) || install.packages("igraph"))
+if(!require(shiny)) {install.packages("shiny")}
+if(!require(text2vec)) {install.packages("text2vec")}
+if(!require(tm)) {install.packages("tm")}
+if(!require(tokenizers)) {install.packages("tokenizers")}
+if(!require(wordcloud)) {install.packages("wordcloud")}
+if(!require(slam)) {install.packages("slam")}
+if(!require(maptpx)) {install.packages("maptpx")}
+if(!require(igraph)) {install.packages("igraph")}
 
 library(shiny)
 library(text2vec)
