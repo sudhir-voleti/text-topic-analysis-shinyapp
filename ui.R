@@ -12,8 +12,8 @@ library(maptpx)
 
 shinyUI(fluidPage(
   
- titlePanel("Text Topic Analysis"),
-  
+ #titlePanel("Text Topic Analysis"),
+  titlePanel(title=div(img(src="logo.png",align='right'),"Text Topic Analysis")),
   # Input in sidepanel:
   sidebarPanel(
     
