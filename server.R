@@ -29,7 +29,7 @@ dtm_tcm =  reactive({
                             min.dtm.freq = input$freq,
                             skip.grams.window = 10)
   # if (input$ws == "weightTf") {
-    dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTf)  
+    dtm = as.DocumentTermMatrix(dtm.tcm$dtm)  # , weighting = weightTf
   # } 
   # 
   # if (input$ws == "weightTfIdf"){
