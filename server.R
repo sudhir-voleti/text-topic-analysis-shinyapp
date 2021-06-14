@@ -37,6 +37,12 @@ shinyServer(function(input, output,session) {
     }
   })
   
+  output$up_size <- renderPrint({
+    size <- dim(dataset())
+    paste0("Dimensions of uploaded data: ",size[1]," (rows) X ", size[2]," (Columns)")
+  })
+  
+  
   output$samp_data <- DT::renderDataTable({
     DT::datatable(head(dataset()),rownames = FALSE)
   })
@@ -92,7 +98,7 @@ dtm_tcm =  eventReactive(input$apply,{
 
 output$dtm_size <- renderPrint({
   size <- dim(dtm_tcm()$dtm)
-  paste0("Dimensions of DTM are ",size[1]," (rows) X ", size[2]," (Columns)")
+  paste0("Dimensions of DTM: ",size[1]," (rows) X ", size[2]," (Columns)")
 })
 
 
@@ -291,11 +297,14 @@ output$score <- DT::renderDataTable({
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
   {
+    dataset <- dataset()
+    dataset[,input$x] <- as.character(dataset[,input$x])
     tb = lda()$kappa*100
-    tb = data.frame(as.numeric(rownames(tb)), round(tb, 2))   # my edit
+    tb = data.frame(rownames(tb), round(tb, 2))   # my edit
     colnames(tb) = c(input$x,paste("Topic",1:(ncol(tb)-1)))
     
-    test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
+    test =  tb %>% dplyr::left_join(dataset,by = input$x)
+    #test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
     return(test)}
 })
 # Show table:
