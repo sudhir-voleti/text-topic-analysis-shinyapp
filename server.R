@@ -84,7 +84,7 @@ dtm_tcm =  eventReactive(input$apply,{
                             skip.grams.window = 10)
   # if (input$ws == "weightTf") {
 
-    dtm = as.matrix(dtm.tcm$dtm, weighting = weightTf)  
+    dtm = as.matrix(dtm.tcm$dtm)#, weighting = weightTf)  
 
   # } 
   # 
