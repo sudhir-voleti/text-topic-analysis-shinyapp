@@ -5,19 +5,73 @@
 shinyServer(function(input, output,session) {
   set.seed=2092014   
 
-dataset <- reactive({
+  dataset <- reactive({
     if (is.null(input$file)) {return(NULL)}
-      else {
+    else {
+      
+      if(file_ext(input$file$datapath)=="txt"){
         Document = readLines(input$file$datapath)
+        #colnames(Document) <- c("Doc.id","Document")
         Doc.id=seq(1:length(Document))
         calib=data.frame(Doc.id,Document)
+        print(input$file$name)
         return(calib)}
-      })
-
-dtm_tcm =  reactive({
+      else{
+        Document = read.csv(input$file$datapath ,header=TRUE, sep = ",", stringsAsFactors = F)
+        Document[,1] <- str_to_title(Document[,1])
+        Document[,1] <- make.names(Document[,1], unique=TRUE)
+        Document[,1] <- tolower(Document[,1])
+        Document[,1] <- str_replace_all(Document[,1],"\\.","_")
+        Document<-Document[complete.cases(Document), ]
+        Document <- Document[!(duplicated(Document[,1])), ]
+        rownames(Document) <- Document[,1]
+        
+        # colnames(Document) <- c("Doc.id","Document")
+        #Doc.id=seq(1:length(Document))
+        # calib=data.frame(Doc.id,Document)
+        #print(input$file$name)
+        
+        return(Document)
+      }
+      
+    }
+  })
   
-  textb = dataset()$Document
-  ids = dataset()$Doc.id
+  output$up_size <- renderPrint({
+    size <- dim(dataset())
+    paste0("Dimensions of uploaded data: ",size[1]," (rows) X ", size[2]," (Columns)")
+  })
+  
+  
+  output$samp_data <- DT::renderDataTable({
+    DT::datatable(head(dataset()),rownames = FALSE)
+  })
+  
+  cols <- reactive({colnames(dataset())})
+  y_col <- reactive({
+    x <- match(input$x,cols())
+    y_col <- cols()[-x]
+    return(y_col)
+    
+  })
+  
+  output$id_var <- renderUI({
+    print(cols())
+    selectInput("x","Select ID Column",choices = cols())
+  })
+  
+  
+  output$doc_var <- renderUI({
+    selectInput("y","Select Text Column",choices = y_col())
+  })
+  
+  
+  
+  
+dtm_tcm =  eventReactive(input$apply,{
+  
+  textb = dataset()[,input$y]
+  ids = dataset()[,input$x]
 
   dtm.tcm = dtm.tcm.creator(text = textb,
                             id = ids,
@@ -29,7 +83,9 @@ dtm_tcm =  reactive({
                             min.dtm.freq = input$freq,
                             skip.grams.window = 10)
   # if (input$ws == "weightTf") {
-    dtm = as.DocumentTermMatrix(dtm.tcm$dtm)  # , weighting = weightTf
+
+    dtm = as.matrix(dtm.tcm$dtm, weighting = weightTf)  
+
   # } 
   # 
   # if (input$ws == "weightTfIdf"){
@@ -40,6 +96,13 @@ dtm_tcm =  reactive({
   dtm_tcm_obj = list(dtm = dtm)#tcm = tcm)
   return(dtm_tcm_obj)
 })
+
+
+output$dtm_size <- renderPrint({
+  size <- dim(dtm_tcm()$dtm)
+  paste0("Dimensions of DTM: ",size[1]," (rows) X ", size[2]," (Columns)")
+})
+
 
 wordcounts = reactive({
   
@@ -54,15 +117,31 @@ output$wordcloud <- renderPlot({
   
       })
 
-output$dtmsummary  <- renderPrint({
+
+ordered_dtm <- reactive({if (is.null(input$file)) {return(NULL)}
+  else{
+    mat1= dtm_tcm()$dtm
+    a = colSums(mat1)
+    b = order(-a)     # nice syntax for ordering vector in decr order  
+    mat2 = mat1[,b]
+    return(mat2)
+    
+  }
+  
+})
+
+output$dtmsummary  <- DT::renderDataTable({
       if (is.null(input$file)) {return(NULL)}
   else {
-    sortedobj = dtm_tcm()$dtm[,order(wordcounts(), decreasing = T)]
-    inspect(t(sortedobj[1:10,1:10]))
+    # sortedobj = dtm_tcm()$dtm[,order(wordcounts(), decreasing = T)]
+    # t(sortedobj[1:10,1:10])
+    temp <- ordered_dtm()[1:10,1:10]
+    #  temp <- tem[1:10,1:10]
+    return(temp)
   }
       })
 
-output$dtmsummary1  <- renderPrint({
+output$dtmsummary1  <- DT::renderDataTable({
   if (is.null(input$file)) {return(NULL)}
   else {
     data.frame(Counts = wordcounts()[order(wordcounts(), decreasing = T)][1:input$max])
@@ -211,20 +290,23 @@ for (j in 1:max_plots) {
 })     # reactive da2 ends
   
 # Show table:
-output$score <- renderDataTable({
-  da2()
-}, options = list(lengthMenu = c(10, 30, 50), pageLength = 100))  # my edits here
+output$score <- DT::renderDataTable({
+ DT::datatable(da2(),options = list(lengthMenu = c(10, 30, 50), pageLength = 100),rownames = FALSE)
+})  # my edits here
   
 # }, digits = 3)   # my edit
   
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
   {
+    dataset <- dataset()
+    dataset[,input$x] <- as.character(dataset[,input$x])
     tb = lda()$kappa*100
-    tb = data.frame(as.numeric(rownames(tb)), round(tb, 2))   # my edit
-    colnames(tb) = c("Doc.id",paste("Topic",1:(ncol(tb)-1)))
+    tb = data.frame(rownames(tb), round(tb, 2))   # my edit
+    colnames(tb) = c(input$x,paste("Topic",1:(ncol(tb)-1)))
     
-    test = merge(tb, dataset(), by.x ="Doc.id", by.y= "Doc.id", all=T)
+    test =  tb %>% dplyr::left_join(dataset,by = input$x)
+    #test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
     return(test)}
 })
 # Show table:
