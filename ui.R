@@ -12,7 +12,7 @@ library(maptpx)
 
 shinyUI(fluidPage(
   
- #titlePanel("Text Topic Analysis"),
+  title = "Text Topic Analysis",
   titlePanel(title=div(img(src="logo.png",align='right'),"Text Topic Analysis")),
   # Input in sidepanel:
   sidebarPanel(
@@ -64,6 +64,9 @@ shinyUI(fluidPage(
                          ),
 
                 tabPanel("TDM & Word Cloud",
+                         h4("Sample of uploaded datasest"),
+                         DT::dataTableOutput("samp_data"),
+                         hr(),
                          h4("DTM Size"),
                          verbatimTextOutput("dtm_size"),
                          hr(),
@@ -76,13 +79,13 @@ shinyUI(fluidPage(
                          h4("Weights Distribution of Wordcloud"),
                          DT::dataTableOutput("dtmsummary1")),
                 
-                tabPanel("Topic Model - Summary",verbatimTextOutput("summary")),
+                #tabPanel("Topic Model - Summary",verbatimTextOutput("summary")),
                 tabPanel("Topics Wordcloud",uiOutput("plots2")),
                 tabPanel("Topics Co-occurrence",uiOutput("plots3")),
                 # tabPanel("Topics eta values",tableOutput("summary2")),
                 
                 #                         
-                tabPanel("Token-Topic Loadings",h4("Top terms for each topic"), dataTableOutput("score")),
+                tabPanel("Token-Topic Loadings",h4("Top terms for each topic"), DT::dataTableOutput("score")),
                 
                 tabPanel("Topic Scores as Doc Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),

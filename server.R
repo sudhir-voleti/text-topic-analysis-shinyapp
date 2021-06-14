@@ -37,6 +37,10 @@ shinyServer(function(input, output,session) {
     }
   })
   
+  output$samp_data <- DT::renderDataTable({
+    DT::datatable(head(dataset()),rownames = FALSE)
+  })
+  
   cols <- reactive({colnames(dataset())})
   y_col <- reactive({
     x <- match(input$x,cols())
@@ -278,9 +282,9 @@ for (j in 1:max_plots) {
 })     # reactive da2 ends
   
 # Show table:
-output$score <- renderDataTable({
-  da2()
-}, options = list(lengthMenu = c(10, 30, 50), pageLength = 100))  # my edits here
+output$score <- DT::renderDataTable({
+ DT::datatable(da2(),options = list(lengthMenu = c(10, 30, 50), pageLength = 100),rownames = FALSE)
+})  # my edits here
   
 # }, digits = 3)   # my edit
   
@@ -289,9 +293,9 @@ da1 = reactive({
   {
     tb = lda()$kappa*100
     tb = data.frame(as.numeric(rownames(tb)), round(tb, 2))   # my edit
-    colnames(tb) = c("Doc.id",paste("Topic",1:(ncol(tb)-1)))
+    colnames(tb) = c(input$x,paste("Topic",1:(ncol(tb)-1)))
     
-    test = merge(tb, dataset(), by.x ="Doc.id", by.y= "Doc.id", all=T)
+    test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
     return(test)}
 })
 # Show table:
