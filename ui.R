@@ -45,7 +45,7 @@ shinyUI(fluidPage(
     tabsetPanel(type = "tabs",
                 #
                 tabPanel("Overview & Example Dataset",h4(p("How to use this App")),
-                         
+                         a(href="https://www.youtube.com/watch?v=GilUJqlvTgE","Youtube Link for App Navigation"),
                          p("To use this app you need a document corpus in txt file format. Make sure each document is separated from another document with a new line character.
                            To do basic Text Analysis in your text corpus, click on Browse in left-sidebar panel and upload the txt file. Once the file is uploaded it will do the computations in 
                             back-end with default inputs and accordingly results will be displayed in various tabs.", align = "justify"),
@@ -59,6 +59,8 @@ shinyUI(fluidPage(
                          verbatimTextOutput("start"),
                          h4(p("Download Sample text file")), 
                          downloadButton('downloadData1', 'Download Nokia Lumia reviews txt file'),br(),br(),
+                         downloadButton('downloadData3', 'Download Uber Reviews CSV file'),br(),br(),
+                         downloadButton('downloadData4', 'Download Airline Tweets CSV file'),br(),br(),
                          p("Please note that download will not work with RStudio interface. Download will work only in web-browsers. So open this app in a web-browser and then download the example file. For opening this app in web-browser click on \"Open in Browser\" as shown below -"),
                          img(src = "example1.png")
                          ),
