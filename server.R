@@ -366,6 +366,13 @@ output$downloadData2 <- downloadHandler(
   }
 )
   
+    
+  output$downloadData03 <- downloadHandler(
+  filename = function() { "mission-vision.csv" },
+  content = function(file) {
+    write.csv(read.csv("data/mission vision.csv"), file, row.names=F, col.names=F)
+  }
+)
   
   output$downloadData3 <- downloadHandler(
   filename = function() { "uber_reviews_itune.csv" },
