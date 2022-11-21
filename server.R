@@ -3,6 +3,7 @@
 #################################################
 
 library(tools)
+library(stringr)
 
 shinyServer(function(input, output,session) {
   set.seed=2092014   
@@ -334,7 +335,7 @@ da1 = reactive({
     tb = data.frame(rownames(tb), round(tb, 2))   # my edit
     colnames(tb) = c(input$x,paste("Topic",1:(ncol(tb)-1)))
     
-    if(is.null(fname())){return(mat1)}
+    if(is.null(fname())){return(tb)}
     else{
       names(tb)[c(-1)]<-fname()
       return(tb)
