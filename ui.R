@@ -23,6 +23,9 @@ shinyUI(fluidPage(
     
     textInput("stopw", ("Enter stop words separated by comma(,)"), value = "will,can"),
     
+    textInput('fname',label = "Enter Topic Name (seperated by comma)"),
+    
+    
     # selectInput("ws", "Weighing Scheme", 
     #             c("weightTf","weightTfIdf"), selected = "weightTf"), # weightTf, weightTfIdf, weightBin, and weightSMART.
     
@@ -89,7 +92,8 @@ shinyUI(fluidPage(
                 # tabPanel("Topics eta values",tableOutput("summary2")),
                 
                 #                         
-                tabPanel("Token-Topic Loadings",h4("Top terms for each topic"), DT::dataTableOutput("score")),
+                tabPanel("Token-Topic Loadings",h4("Top terms for each topic"), 
+                         DT::dataTableOutput("score")),
                 
                 tabPanel("Topic Scores as Doc Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
