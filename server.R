@@ -2,6 +2,8 @@
 #               Topic    Analysis             #
 #################################################
 
+library(tools)
+
 shinyServer(function(input, output,session) {
   set.seed=2092014   
 
@@ -36,6 +38,24 @@ shinyServer(function(input, output,session) {
       
     }
   })
+  
+  fname <- reactive({
+    if(length(strsplit(input$fname,',')[[1]])==0){return(NULL)}
+    else{
+      return(strsplit(input$fname,',')[[1]])
+    }
+  })
+  
+  fselect = reactive({
+    if (is.null(input$file)) { return(NULL) }
+    else{
+      
+      fselect=input$topic
+      return(fselect)
+    }
+  })
+  
+  
   
   output$up_size <- renderPrint({
     size <- dim(dataset())
@@ -285,7 +305,16 @@ for (j in 1:max_plots) {
    mat = round(mat, 2)
   terms = row.names(mat)
   mat1 = data.frame(terms, mat)   # , terms
-  colnames(mat1) = c('terms', paste0('topic_',1:input$topic))    # 'terms', 
+  
+  names(mat1)[1] <- "Terms"# [2:ncol(Dataset())];rownames(b1) <- colnames(Dataset())  # edit 2  
+  #-------#
+  if(is.null(fname())){return(mat1)}
+  else{
+    names(mat1)[c(-1)]<-fname()
+    return(mat1)
+  }
+  
+  #colnames(mat1) = c('terms', paste0('topic_',1:input$topic))    # 'terms', 
   return(mat1)
 })     # reactive da2 ends
   
@@ -304,6 +333,12 @@ da1 = reactive({
     tb = lda()$kappa*100
     tb = data.frame(rownames(tb), round(tb, 2))   # my edit
     colnames(tb) = c(input$x,paste("Topic",1:(ncol(tb)-1)))
+    
+    if(is.null(fname())){return(mat1)}
+    else{
+      names(tb)[c(-1)]<-fname()
+      return(tb)
+    }
     
     test =  tb %>% dplyr::left_join(dataset,by = input$x)
     #test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
