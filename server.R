@@ -370,7 +370,7 @@ output$downloadData2 <- downloadHandler(
   output$downloadData03 <- downloadHandler(
   filename = function() { "mission-vision.csv" },
   content = function(file) {
-    write.csv(read.csv("data/mission vision.csv"), file, row.names=F, col.names=F, fileEncoding = "UTF-8")
+    write.csv(read.csv("data/mission vision.csv"), file, row.names=F, col.names=F) #, fileEncoding = "UTF-8")
   }
 )
   
