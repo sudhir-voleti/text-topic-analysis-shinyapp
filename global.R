@@ -13,8 +13,8 @@ wc1 = function(n,mat1,mat2){
 
 text.clean = function(x)                    # text data
 { require("tm")
-  x  =  gsub("<.*?>", " ", x)               # regex for removing HTML tags
   x  =  iconv(x, "latin1", "ASCII", sub="") # Keep only ASCII characters
+  x  =  gsub("<.*?>", " ", x)               # regex for removing HTML tags
   x  =  gsub("[^[:alnum:]]", " ", x)        # keep only alpha numeric
   x  =  tolower(x)                          # convert to lower case characters
   x  =  removeNumbers(x)                    # removing numbers
