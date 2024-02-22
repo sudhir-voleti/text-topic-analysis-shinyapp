@@ -323,8 +323,11 @@ for (j in 1:max_plots) {
 output$score <- DT::renderDataTable({
  DT::datatable(da2(),options = list(lengthMenu = c(10, 30, 50), pageLength = 100),rownames = FALSE)
 })  # my edits here
-  
-# }, digits = 3)   # my edit
+
+  ## my new code!
+output$outp_tbl <- DT::renderDataTable({
+  output$outp_tbl <- renderTable({build_outp_tbl(da2(), K1=20)})
+
   
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
@@ -345,6 +348,7 @@ da1 = reactive({
     #test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
     return(test)}
 })
+  
 # Show table:
 output$table <- renderDataTable({
   da1()
