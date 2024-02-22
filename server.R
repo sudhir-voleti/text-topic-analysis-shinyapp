@@ -325,10 +325,8 @@ output$score <- DT::renderDataTable({
 })  # my edits here
 
   ## my new code!
- output$outp_tbl <- renderTable({build_outp_tbl(da2(), K1=20)})
-  
-
-  
+ output$outp_tbl <- renderTable({build_outp_tbl(lda()$theta, K1=20)}) # da2()
+   
 da1 = reactive({
   if (is.null(input$file)) {return(NULL)}
   {
