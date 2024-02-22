@@ -1,3 +1,22 @@
+# TOP_N TPOKENS TBL FOR LLM ASSIST
+build_outp_tbl <- function(df1, # loadings_tbl
+                           K1=20){. #K1 == no. of tokens wanted
+
+  outp_df <- data.frame(matrix(ncol = ncol(df1), nrow = K1))
+  outp_df[] <- lapply(outp_df, as.character); head(outp_df)
+  
+  for (i0 in 1:ncol(df1)){
+    
+    df1_ratios = df1 / (df1[,i0]+0.1); #head(df1_ratios)
+    df1_othcols = df1_ratios[,-i0]; #head(df1_othcols)
+    ind0 = apply(df1_othcols, 1, function(x){(max(x) <= 0.5) }); #head(ind0); sum(ind0)
+    df1_out = df1[ind0, i0]; #head(df1_out)
+    toks_out = rownames(df1)[ind0]; #head(toks_out)
+    sorted_df1_inds = order(-df1_out); #head(sorted_df1_inds)
+    outp_df[,i0] = toks_out[sorted_df1_inds][1:K1]   } # i0 ends
+  
+  return(outp_df)}
+
 max_plots = 20
 wc1 = function(n,mat1,mat2){
   for (i in 1:ncol(mat2)) {
