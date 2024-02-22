@@ -325,8 +325,8 @@ output$score <- DT::renderDataTable({
 })  # my edits here
 
   ## my new code!
-output$outp_tbl <- DT::renderDataTable({
-  output$outp_tbl <- renderTable({build_outp_tbl(da2(), K1=20)})
+ output$outp_tbl <- renderTable({build_outp_tbl(da2(), K1=20)})
+  
 
   
 da1 = reactive({
