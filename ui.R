@@ -97,7 +97,7 @@ shinyUI(fluidPage(
                          DT::dataTableOutput("score")),
                 
                 tabPanel("Topic Loadings simplified", h4("Top 20 terms for each topic"), 
-                         tableOutput("outp_df")),
+                         tableOutput("outp_tbl")),
                 
                 tabPanel("Topic Scores as Doc Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
