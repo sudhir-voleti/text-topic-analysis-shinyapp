@@ -11,7 +11,7 @@ build_outp_tbl <- function(df1, toks,
     
     df1_ratios = df1 / (df1[,i0]+0.1); #head(df1_ratios)
     df1_othcols = df1_ratios[,-i0]; #head(df1_othcols)
-    ind0 = apply(df1_othcols, 1, function(x){(max(x) <= 0.5) }); #head(ind0); sum(ind0)
+    ind0 = apply(as.data.frame(df1_othcols), 1, function(x){(max(x) <= 0.5) }); #head(ind0); sum(ind0)
     df1_out = df1[ind0, i0]; #head(df1_out)
     toks_out = rownames(df1)[ind0]; #head(toks_out)
     sorted_df1_inds = order(-df1_out); #head(sorted_df1_inds)
