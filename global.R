@@ -1,10 +1,11 @@
 # TOP_N TPOKENS TBL FOR LLM ASSIST
-build_outp_tbl <- function(df1, # loadings_tbl
+build_outp_tbl <- function(df1, toks, 
                            K1=20){ #K1 == no. of tokens wanted
 
   outp_df <- data.frame(matrix(ncol = ncol(df1), nrow = K1))
   outp_df[] <- lapply(outp_df, as.character); head(outp_df)
   names(outp_df) <- paste("topic_", 1:ncol(outp_df))                                
+  rownames(df1) <- c(toks)
   
   for (i0 in 1:ncol(df1)){
     
