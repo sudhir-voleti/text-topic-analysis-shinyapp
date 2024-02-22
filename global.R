@@ -4,6 +4,7 @@ build_outp_tbl <- function(df1, # loadings_tbl
 
   outp_df <- data.frame(matrix(ncol = ncol(df1), nrow = K1))
   outp_df[] <- lapply(outp_df, as.character); head(outp_df)
+  names(outp_df) <- paste("topic_", 1:ncol(outp_df))                                
   
   for (i0 in 1:ncol(df1)){
     
