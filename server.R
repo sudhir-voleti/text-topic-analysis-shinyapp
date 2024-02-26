@@ -342,7 +342,7 @@ da1 = reactive({
       return(tb)
     }
     
-    test =  tb %>% dplyr::left_join(dataset,by = input$x)
+    test =  tb |> dplyr::left_join(dataset,by = input$x)
     #test = merge(tb, dataset(), by.x =input$x, by.y= input$x, all=T)
     return(test)}
 })
