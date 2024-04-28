@@ -18,23 +18,30 @@ shinyServer(function(input, output,session) {
         Doc.id=seq(1:length(Document))
         calib=data.frame(Doc.id,Document)
         print(input$file$name)
-        return(calib)}
-      else{
-        Document = read.csv(input$file$datapath ,header=TRUE, sep = ",", stringsAsFactors = F)
-        Document[,1] <- str_to_title(Document[,1])
-        Document[,1] <- make.names(Document[,1], unique=TRUE)
-        Document[,1] <- tolower(Document[,1])
-        Document[,1] <- str_replace_all(Document[,1],"\\.","_")
-        Document<-Document[complete.cases(Document), ]
-        Document <- Document[!(duplicated(Document[,1])), ]
-        rownames(Document) <- Document[,1]
-        
-        # colnames(Document) <- c("Doc.id","Document")
-        #Doc.id=seq(1:length(Document))
-        # calib=data.frame(Doc.id,Document)
-        #print(input$file$name)
-        
-        return(Document)
+        return(calib)} else if 
+      {
+        if(file_ext(input$file$datapath)=="pdf"){ 
+          Document = convert_pdf_to_text(input$file$datapath)
+          Doc.id=seq(1:length(Document))
+          calib=data.frame(Doc.id,Document)
+          print(input$file$name)
+          return(calib)} else 
+        {
+          Document = read.csv(input$file$datapath ,header=TRUE, sep = ",", stringsAsFactors = F)
+          Document[,1] <- str_to_title(Document[,1])
+          Document[,1] <- make.names(Document[,1], unique=TRUE)
+          Document[,1] <- tolower(Document[,1])
+          Document[,1] <- str_replace_all(Document[,1],"\\.","_")
+          Document<-Document[complete.cases(Document), ]
+          Document <- Document[!(duplicated(Document[,1])), ]
+          rownames(Document) <- Document[,1]
+          
+          # colnames(Document) <- c("Doc.id","Document")
+          #Doc.id=seq(1:length(Document))
+          # calib=data.frame(Doc.id,Document)
+          #print(input$file$name)
+          
+          return(Document)
       }
       
     }
