@@ -34,7 +34,7 @@ shinyServer(function(input, output,session) {
         pdf_text1 <- paste(pdf_text1, collapse = "\n\n")
         pdf_text2 <- str_split(pdf_text1, pattern = "\n\n")
         #Document = pdf_text2
-          Doc.id <- seq(1, length(pdf_text2))
+          Doc.id <- seq(1, length(pdf_text2[[1]]))
           calib <- data.frame(Doc.id, pdf_text2)
           colnames(calib) <- c("Doc.id","Documents")
           print(input$file$name)
