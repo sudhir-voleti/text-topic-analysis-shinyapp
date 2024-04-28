@@ -15,9 +15,9 @@ shinyServer(function(input, output,session) {
       
       if(file_ext(input$file$datapath)=="txt"){
         Document = readLines(input$file$datapath)        
-        Doc.id=seq(1:length(Document))
-        calib=data.frame(Doc.id, Document)
-        colnames(calib) <- c("Doc.id","Document")
+        Doc.id <- seq(1,length(Document))
+        calib <- data.frame(Doc.id, Document)
+        colnames(calib) <- c("Doc.id","Documents")
         print(input$file$name)
         return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {          
@@ -33,10 +33,10 @@ shinyServer(function(input, output,session) {
         # Combine text from all pages while preserving line breaks
         pdf_text1 <- paste(pdf_text1, collapse = "\n\n")
         pdf_text2 <- str_split(pdf_text1, pattern = "\n\n")
-        Document = pdf_text2
-          Doc.id=seq(1:length(Document))
-          calib=data.frame(Doc.id,Document)
-          colnames(calib) <- c("Doc.id","Document")
+        #Document = pdf_text2
+          Doc.id <- seq(1, length(pdf_text2))
+          calib <- data.frame(Doc.id, pdf_text2)
+          colnames(calib) <- c("Doc.id","Documents")
           print(input$file$name)
           return(calib)} else 
         {
