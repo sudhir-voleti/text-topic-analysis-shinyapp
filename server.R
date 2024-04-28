@@ -14,10 +14,10 @@ shinyServer(function(input, output,session) {
     else {
       
       if(file_ext(input$file$datapath)=="txt"){
-        Document = readLines(input$file$datapath)
-        #colnames(Document) <- c("Doc.id","Document")
+        Document = readLines(input$file$datapath)        
         Doc.id=seq(1:length(Document))
-        calib=data.frame(Doc.id, Document=Document)
+        calib=data.frame(Doc.id, Document)
+        colnames(calib) <- c("Doc.id","Document")
         print(input$file$name)
         return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {          
@@ -35,7 +35,8 @@ shinyServer(function(input, output,session) {
         pdf_text2 <- str_split(pdf_text1, pattern = "\n\n")
         Document = pdf_text2
           Doc.id=seq(1:length(Document))
-          calib=data.frame(Doc.id,Document=Document)
+          calib=data.frame(Doc.id,Document)
+          colnames(calib) <- c("Doc.id","Document")
           print(input$file$name)
           return(calib)} else 
         {
@@ -54,49 +55,37 @@ shinyServer(function(input, output,session) {
   
   fname <- reactive({
     if(length(strsplit(input$fname,',')[[1]])==0){return(NULL)}
-    else{
-      return(strsplit(input$fname,',')[[1]])
-    }
+    else{ return(strsplit(input$fname,',')[[1]])    }
   })
   
   fselect = reactive({
     if (is.null(input$file)) { return(NULL) }
-    else{
-      
+    else{      
       fselect=input$topic
       return(fselect)
     }
   })
-  
-  
   
   output$up_size <- renderPrint({
     size <- dim(dataset())
     paste0("Dimensions of uploaded data: ",size[1]," (rows) X ", size[2]," (Columns)")
   })
   
-  
   output$samp_data <- DT::renderDataTable({
-    DT::datatable(head(dataset()),rownames = FALSE)
-  })
+    DT::datatable(head(dataset()),rownames = FALSE)   })
   
   cols <- reactive({colnames(dataset())})
   y_col <- reactive({
     x <- match(input$x,cols())
     y_col <- cols()[-x]
-    return(y_col)
-    
-  })
+    return(y_col) })
   
   output$id_var <- renderUI({
     print(cols())
-    selectInput("x","Select ID Column",choices = cols())
-  })
-  
-  
+    selectInput("x","Select ID Column",choices = cols())   })
+    
   output$doc_var <- renderUI({
-    selectInput("y","Select Text Column",choices = y_col())
-  })
+    selectInput("y","Select Text Column",choices = y_col())   })
   
 dtm_tcm =  eventReactive(input$apply,{  
   textb = dataset()[,input$y]
