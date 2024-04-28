@@ -18,9 +18,8 @@ shinyServer(function(input, output,session) {
         Doc.id=seq(1:length(Document))
         calib=data.frame(Doc.id,Document)
         print(input$file$name)
-        return(calib)} else if 
+        return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {
-        if(file_ext(input$file$datapath)=="pdf"){ 
           Document = convert_pdf_to_text(input$file$datapath)
           Doc.id=seq(1:length(Document))
           calib=data.frame(Doc.id,Document)
