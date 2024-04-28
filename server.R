@@ -21,7 +21,7 @@ shinyServer(function(input, output,session) {
         print(input$file$name)
         return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {          
-        pdf_text0 <- pdftools::pdf_text(input$file$datapath, encoding = "UTF-8")                
+        pdf_text0 <- pdftools::pdf_text(input$file$datapath)                
         pdf_text1 <- str_replace_all(pdf_text0, 
                                      pattern = "([.!?])\n(\\w)", 
                                      replacement = "\\1\n\n\\2") 
