@@ -17,7 +17,7 @@ shinyServer(function(input, output,session) {
         Document = readLines(input$file$datapath)
         #colnames(Document) <- c("Doc.id","Document")
         Doc.id=seq(1:length(Document))
-        calib=data.frame(Doc.id,Document)
+        calib=data.frame(Doc.id, Document=Document)
         print(input$file$name)
         return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {          
@@ -35,7 +35,7 @@ shinyServer(function(input, output,session) {
         pdf_text2 <- str_split(pdf_text1, pattern = "\n\n")
         Document = pdf_text2
           Doc.id=seq(1:length(Document))
-          calib=data.frame(Doc.id,Document)
+          calib=data.frame(Doc.id,Document=Document)
           print(input$file$name)
           return(calib)} else 
         {
