@@ -21,11 +21,19 @@ shinyServer(function(input, output,session) {
         print(input$file$name)
         return(calib)} else if(file_ext(input$file$datapath)=="pdf")
       {          
-        pdf_text <- pdftools::pdf_text(input$file$datapath) # Extract text from the PDF
-        pdf_text_combined <- paste(pdf_text, collapse = "\n") # Combine text from all pages, preserve linebreaks  
-        pdf_text_combined <- gsub("\n{2,}", "\n\n", pdf_text_combined) # Collapse multiple \n reps of newline into a para-break
-        pdf_text_combined <- gsub("\n(?!\\s)", "", pdf_text_combined, perl = TRUE) # drop newline if not followed by spaces        
-        Document = pdf_text_combined
+        pdf_text0 <- pdftools::pdf_text(input$file$datapath, encoding = "UTF-8")                
+        pdf_text1 <- str_replace_all(pdf_text0, 
+                                     pattern = "([.!?])\n(\\w)", 
+                                     replacement = "\\1\n\n\\2") 
+  
+        # Collapse multiple repetitions of newline into a paragraph break
+        pdf_text1 <- gsub("\n{2,}", "\n\n", pdf_text1)
+        pdf_text1 <- gsub("\n\\s{2,}", " ", pdf_text1)
+  
+        # Combine text from all pages while preserving line breaks
+        pdf_text1 <- paste(pdf_text1, collapse = "\n\n")
+        pdf_text2 <- str_split(pdf_text1, pattern = "\n\n")
+        Document = pdf_text2
           Doc.id=seq(1:length(Document))
           calib=data.frame(Doc.id,Document)
           print(input$file$name)
