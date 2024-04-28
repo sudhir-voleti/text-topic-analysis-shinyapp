@@ -46,17 +46,10 @@ shinyServer(function(input, output,session) {
           Document[,1] <- str_replace_all(Document[,1],"\\.","_")
           Document<-Document[complete.cases(Document), ]
           Document <- Document[!(duplicated(Document[,1])), ]
-          rownames(Document) <- Document[,1]
-          
-          # colnames(Document) <- c("Doc.id","Document")
-          #Doc.id=seq(1:length(Document))
-          # calib=data.frame(Doc.id,Document)
-          #print(input$file$name)
-          
+          rownames(Document) <- Document[,1]          
           return(Document)
-      }
-      
-    }
+      } # else ends     
+    } # upper else ends
   })
   
   fname <- reactive({
@@ -105,14 +98,9 @@ shinyServer(function(input, output,session) {
     selectInput("y","Select Text Column",choices = y_col())
   })
   
-  
-  
-  
-dtm_tcm =  eventReactive(input$apply,{
-  
+dtm_tcm =  eventReactive(input$apply,{  
   textb = dataset()[,input$y]
   ids = dataset()[,input$x]
-
   dtm.tcm = dtm.tcm.creator(text = textb,
                             id = ids,
                             std.clean = TRUE,
@@ -122,15 +110,8 @@ dtm_tcm =  eventReactive(input$apply,{
                             # bigram.min.freq = 20,
                             min.dtm.freq = input$freq,
                             skip.grams.window = 10)
-  # if (input$ws == "weightTf") {
 
-    dtm = as.matrix(dtm.tcm$dtm)#, weighting = weightTf)  
-
-  # } 
-  # 
-  # if (input$ws == "weightTfIdf"){
-  #   dtm = as.DocumentTermMatrix(dtm.tcm$dtm, weighting = weightTfIdf)
-  # }
+    dtm = as.matrix(dtm.tcm$dtm)
   
   # tcm = dtm.tcm$tcm
   dtm_tcm_obj = list(dtm = dtm)#tcm = tcm)
@@ -144,17 +125,14 @@ output$dtm_size <- renderPrint({
 })
 
 
-wordcounts = reactive({
-  
-  return(dtm.word.count(dtm_tcm()$dtm))
-  
+wordcounts = reactive({  
+  return(dtm.word.count(dtm_tcm()$dtm))  
 }) 
 
 output$wordcloud <- renderPlot({
   tsum = wordcounts()
   tsum = tsum[order(tsum, decreasing = T)]
-  dtm.word.cloud(count = tsum,max.words = input$max,title = 'Term Frequency Wordcloud')
-  
+  dtm.word.cloud(count = tsum,max.words = input$max,title = 'Term Frequency Wordcloud')  
       })
 
 
@@ -164,10 +142,8 @@ ordered_dtm <- reactive({if (is.null(input$file)) {return(NULL)}
     a = colSums(mat1)
     b = order(-a)     # nice syntax for ordering vector in decr order  
     mat2 = mat1[,b]
-    return(mat2)
-    
-  }
-  
+    return(mat2)    
+  }  
 })
 
 output$dtmsummary  <- DT::renderDataTable({
