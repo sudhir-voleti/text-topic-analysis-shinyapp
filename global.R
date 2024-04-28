@@ -1,3 +1,19 @@
+# Function to convert PDF to text while preserving structure
+convert_pdf_to_txt <- function(pdf_file) {
+   
+  if (!file.exists(pdf_file)) {stop("PDF file does not exist.") }
+  
+  pdf_text <- pdftools::pdf_text(pdf_file) # Extract text from the PDF
+  
+  pdf_text_combined <- paste(pdf_text, collapse = "\n") # Combine text from all pages, preserve linebreaks
+  
+  pdf_text_combined <- gsub("\n(?!\\s)", "", pdf_text_combined, perl = TRUE) # drop newline if not followed by spaces
+  
+  pdf_text_combined <- gsub("\n{2,}", "\n\n", pdf_text_combined) # Collapse multiple \n reps of newline into a para-break
+  
+  return(pdf_text_combined)} # func ends
+
+
 # TOP_N TPOKENS TBL FOR LLM ASSIST
 build_outp_tbl <- function(df1, toks, 
                            K1=20){ #K1 == no. of tokens wanted
