@@ -351,8 +351,7 @@ output$downloadData2 <- downloadHandler(
     write.csv(da1(), file, row.names=F)
   }
 )
-  
-    
+      
   output$downloadData03 <- downloadHandler(
   filename = function() { "mission-vision.csv" },
   content = function(file) {
@@ -373,5 +372,10 @@ output$downloadData4 <- downloadHandler(
     write.csv(read.csv("data/airline_sentiment.csv"), file, row.names=F, col.names=F, fileEncoding = "UTF-8")
   }
 )
-
+output$downloadData5 <- downloadHandler(
+  filename = function() { "Indian_patent-act-1970-11march2015.pdf" },
+  content = function(file) {
+    write.csv(read.csv("data/Indian_patent-act-1970-11march2015.pdf"), file, row.names=F, col.names=F, fileEncoding = "UTF-8")
+  }
+)
 })
