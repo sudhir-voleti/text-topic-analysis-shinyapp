@@ -98,6 +98,7 @@ shinyUI(fluidPage(
                 
                 tabPanel("Topic Scores as Doc Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
+                         plotOutput("plot20",height = 600, width = 850)
                          DT::dataTableOutput("table"))
                 
                          )
