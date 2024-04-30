@@ -102,8 +102,8 @@ shinyUI(fluidPage(
                 
                 tabPanel("Topic Scores as Doc Proportions",br(),br(),
                          downloadButton('downloadData2', 'Download Topic Proportions file (Works only in browser)'), br(),br(),
+                         dataTableOutput("topicSumm"),
                          dataTableOutput("table"))
-                
                          )
            )
        )
