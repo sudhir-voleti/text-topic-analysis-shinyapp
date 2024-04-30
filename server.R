@@ -350,6 +350,23 @@ output$table <- renderDataTable({
   da1()
 }, options = list(lengthMenu = c(5, 30, 50), pageLength = 30))
 
+build_summ_tbl <- function(df0){
+  df_out = data.frame(Topic = colnames(df0)[2:ncol(df0)], mean=0, stdev=0, min=0, max=0)
+  for (i0 in 2:ncol(df0)){
+	df_out$mean[i0-1] = mean(df0[,i0], na.rm=TRUE)
+	df_out$stdev[i0-1] = sd(df0[,i0], na.rm=TRUE)
+	df_out$min[i0-1] = min(df0[,i0], na.rm=TRUE)
+	df_out$max[i0-1] = max(df0[,i0], na.rm=TRUE)	} # i0 ends
+  return(df_out)	} # func ends
+
+
+output$topicSumm <- renderDataTable({ 
+  if (is.null(input$file)|input$apply==0) { return(NULL) } else{
+
+  df0 <- da1()
+  df_out <- build_summ_tbl(df0)
+  return(df_out) }
+})
 
 #---------------
 output$downloadData1 <- downloadHandler(
