@@ -339,10 +339,11 @@ output$table <- renderDataTable({
 build_summ_tbl <- function(df0){
   df_out = data.frame(Topic = colnames(df0)[2:ncol(df0)], mean=0, stdev=0, min=0, max=0)
   for (i0 in 2:ncol(df0)){
-	df_out$mean[i0-1] = mean(df0[,i0], na.rm=TRUE)
-	df_out$stdev[i0-1] = sd(df0[,i0], na.rm=TRUE)
-	df_out$min[i0-1] = min(df0[,i0], na.rm=TRUE)
-	df_out$max[i0-1] = max(df0[,i0], na.rm=TRUE)	} # i0 ends
+	df_out$mean[i0-1] = mean(df0[,i0], na.rm=TRUE) |> round(2)
+	df_out$stdev[i0-1] = sd(df0[,i0], na.rm=TRUE) |> round(2)
+	df_out$min[i0-1] = min(df0[,i0], na.rm=TRUE) |> round(2)
+	df_out$max[i0-1] = max(df0[,i0], na.rm=TRUE) |> round(2) 
+  	} # i0 ends
   return(df_out)	} # func ends
 
 
