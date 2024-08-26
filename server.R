@@ -349,8 +349,9 @@ da1 = reactive({
   
 # Show table:
 output$table <- renderDataTable({
-  da1()
-}, options = list(lengthMenu = c(5, 30, 50), pageLength = 30))
+  #da1()
+  DT::datatable(da1(),options = list(lengthMenu = c(10, 30, 50), pageLength = 30),rownames = TRUE)
+}) #, options = list(lengthMenu = c(5, 30, 50), pageLength = 30))
 
 
 #---------------
